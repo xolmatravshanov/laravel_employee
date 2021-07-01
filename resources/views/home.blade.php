@@ -40,11 +40,11 @@
     @endif
 
     <p>
-        <button class="btn btn-success">
-         <a href="{{ route('create') }}">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-        </button>
+        <a href="{{ route('create') }}">
+            <button class="btn btn-success">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </a>
     </p>
    <div >
        <table class="table" id="datatable">
