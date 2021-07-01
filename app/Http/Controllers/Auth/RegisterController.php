@@ -77,10 +77,16 @@ class RegisterController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
+        if (\auth()->check())
+            $user->parent_id = Auth::id();
+        else
 
-        if ($user->save()) {
-             dd($user);
-        }
+
+        $user->save();
+        return $user;
+        /*  if ($user->save()) {
+
+          }*/
     }
 
 

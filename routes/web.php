@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,8 +19,8 @@ Route::get('/', function () {
     return view('auth.register');
 });
 
-Auth::routes();
 
+Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [\App\Http\Controllers\UserController::class, 'index'])->name('home');
     Route::get('/user/create', [\App\Http\Controllers\UserController::class, 'create'])->name('create');

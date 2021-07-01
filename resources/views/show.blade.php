@@ -75,9 +75,9 @@
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
 
-                        <a class="btn btn-primary" href="{{ route('edit',$user->id) }}">
+<!--                        <a class="btn btn-primary" href="{{ route('edit',$user->id) }}">
                             <i class="fa fa-pencil actions-icons" aria-hidden="true"></i>
-                        </a>
+                        </a>-->
 
                         @csrf
                         @method('DELETE')
