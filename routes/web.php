@@ -24,7 +24,8 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [\App\Http\Controllers\UserController::class, 'index'])->name('home');
     Route::get('/user/create', [\App\Http\Controllers\UserController::class, 'create'])->name('create');
-    Route::post('/user/destroy', [\App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+    Route::post('/user/store', [\App\Http\Controllers\UserController::class, 'store'])->name('store');
+    Route::post('/user/destroy/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     Route::get('/user/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('edit');
     Route::get('/user/show/{id}', [\App\Http\Controllers\UserController::class, 'show'])->name('show');
     Route::get('/generate/ref', [\App\Http\Controllers\UserController::class, 'ref'])->name('ref');

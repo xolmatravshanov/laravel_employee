@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'users';
@@ -22,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'parent_id',
     ];
 
 
@@ -46,10 +49,9 @@ class User extends Authenticatable
     ];
 
 
-        /* get users all child users*/
+    /* get users all child users*/
     public function getUsers($id)
     {
-
         $return = [
             'id' => '',
             'name' => '',
@@ -101,5 +103,15 @@ class User extends Authenticatable
         return self::where('parent_id', $id)->paginate(15);
     }
 
+
+    public static function getParent($email)
+    {
+        return self::where('email', $email)->first();
+    }
+
+
+    public  function setPassword($password){
+        $this->attributes['password'] = Hash::make($password);
+    }
 
 }

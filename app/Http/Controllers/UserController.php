@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Testing\Fluent\Concerns\Has;
 
 class UserController extends Controller
 {
@@ -17,7 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $users = User::getUserChilds(Auth::id());
+        $users = User::where('parent_id', Auth::id())->paginate(15);
 
         return view('home', compact('users'));
 
@@ -30,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return view('register');
     }
 
     /**
@@ -41,15 +44,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'body' => 'required',
-            'writer_id' => 'required',
-            'status' => 'required',
-            'category_id' => 'required',
+
+         $data = $request->all();
+
+         $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        User::create($request->all());
+        $data['parent_id'] = Auth::id();
+        $data['password'] = Hash::make($request['password']);
+
+        User::create($data);
 
         return redirect()->route('home')
             ->with('success', 'User created successfully.');

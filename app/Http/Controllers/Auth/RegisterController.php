@@ -70,23 +70,41 @@ class RegisterController extends Controller
      * @param array $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    protected function create(Request $request)
     {
 
-        $user = new User();
+        /*$user = new User();
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
-        if (\auth()->check())
-            $user->parent_id = Auth::id();
-        else
+
+        if (array_key_exists('ref', $data)) {
+            $user->parent_id = $data['ref'];
+        } else {
+            if (array_key_exists('parent_email', $data)) {
+                $parentUser = User::getParent($data['parent_email']);
+                if ($parentUser)
+                    $user->parent_id = $parentUser->id;
+            }
+        }*/
+
+        $data = $request->all();
 
 
-        $user->save();
-        return $user;
-        /*  if ($user->save()) {
+        if (array_key_exists('ref', $data)) {
+            $data['parent_id'] = $data['ref'];
+        }
 
-          }*/
+        if (array_key_exists('parent_email', $data)) {
+            $parentUser = User::getParent($data['parent_email']);
+            if ($parentUser)
+                $data['parent_id'] = $parentUser->id;
+        }
+
+        $data['password'] = Hash::make($request['password']);
+
+        return User::create($data);
+
     }
 
 
@@ -101,7 +119,7 @@ class RegisterController extends Controller
 
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        event(new Registered($user = $this->create($request)));
 
         $this->guard()->login($user);
 
