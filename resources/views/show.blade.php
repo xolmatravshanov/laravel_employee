@@ -46,7 +46,7 @@
             </a>
         </button>
     </p>
-    <table class="table">
+    <table class="table" id='datatable'>
         <thead class="thead-dark">
         <tr>
             <th scope="col">Id</th>
@@ -92,7 +92,7 @@
         @endisset
         </tbody>
     </table>
-
+    @include('components.common.datatable')
     {{-- Pagination --}}
 
   {{ $users->links() }}
